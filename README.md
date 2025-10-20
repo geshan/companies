@@ -20,3 +20,20 @@ docker run -p 8089:8080 companies-app
 ```
 
 Then hit `http://localhost:8089/ping` in your browser.
+
+## Run tests
+
+To run test, use the following command:
+
+```bash
+go test ./...
+```
+### Test Coverage
+
+To check test coverage, use the following command:
+
+```bash
+go test -coverprofile=coverage.out ./...
+go tool cover -html=coverage.out
+```
+This will generate a coverage report and open it in your default web browser.
