@@ -2,23 +2,24 @@ package services
 
 import (
 	"companies/models"
-	"companies/repositories"
 )
 
-type CompanyService struct {
-	companyRepository *repositories.CompanyRepository
+type CompanyRepositoryInterface interface {
+	GetCompanies(page, pageSize int) ([]models.Company, error)
 }
 
-func NewCompanyService() *CompanyService {
-	return &CompanyService{
-		companyRepository: repositories.NewCompanyRepository(),
-	}
+type CompanyService struct {
+	repo CompanyRepositoryInterface
+}
+
+func NewCompanyService(repo CompanyRepositoryInterface) *CompanyService {
+	return &CompanyService{repo: repo}
 }
 
 func (s *CompanyService) GetCompanies(page, pageSize int) ([]models.Company, error) {
 	var companies []models.Company
 
-	companies, err := s.companyRepository.GetCompanies(page, pageSize)
+	companies, err := s.repo.GetCompanies(page, pageSize)
 
 	return companies, err
 }
