@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"companies/repositories"
 	"companies/services"
 	"companies/utils"
 	"net/http"
@@ -14,8 +15,9 @@ type CompanyController struct {
 }
 
 func NewCompanyController() *CompanyController {
+	companyRepo := repositories.NewCompanyRepository()
 	return &CompanyController{
-		companyService: services.NewCompanyService(),
+		companyService: services.NewCompanyService(companyRepo),
 	}
 }
 
