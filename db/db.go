@@ -18,8 +18,13 @@ type Config struct {
 	Database string
 }
 
+type DB interface {
+	Ping() error
+	Close() error
+}
+
 type Service struct {
-	DB *sql.DB
+	DB DB
 }
 
 // NewService creates a new database service
@@ -63,6 +68,13 @@ func NewServiceFromEnv() (*Service, error) {
 	}
 
 	return NewService(config)
+}
+
+func (s *Service) GetDB() *sql.DB {
+	if db, ok := s.DB.(*sql.DB); ok {
+		return db
+	}
+	return nil
 }
 
 // Close closes the database connection
