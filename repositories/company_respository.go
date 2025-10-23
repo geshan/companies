@@ -3,11 +3,12 @@ package repositories
 import (
 	"companies/db"
 	"companies/models"
+	"database/sql"
 	"log"
 )
 
 type CompanyRepository struct {
-	dbService *db.Service
+	db *sql.DB
 }
 
 func NewCompanyRepository() *CompanyRepository {
@@ -16,12 +17,12 @@ func NewCompanyRepository() *CompanyRepository {
 		log.Fatalf("failed to initialize db service: %v", err)
 	}
 	return &CompanyRepository{
-		dbService: svc,
+		db: svc.GetDB(),
 	}
 }
 
 func (r *CompanyRepository) GetCompanies(page, pageSize int) ([]models.Company, error) {
-	rows, err := r.dbService.DB.Query(`SELECT
+	rows, err := r.db.Query(`SELECT
         id, name, description, visa_sponsor, website, logo_url, jobs_page, created_at, updated_at
         FROM company LIMIT ? OFFSET ?`, pageSize, (page-1)*pageSize)
 	if err != nil {
